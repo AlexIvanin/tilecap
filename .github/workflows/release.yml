@@ -1,0 +1,93 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build:
+    name: Build ${{ matrix.platform }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            pkg-ext: .tar.gz
+            deb: true
+
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+            pkg-ext: .tar.gz
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install system deps
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -yqq \
+            libx11-dev libxcb1-dev pkg-config xclip musl-tools
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Install cargo-deb
+        if: matrix.deb
+        run: cargo install cargo-deb
+
+      - name: Build
+        run: cargo build --release --target ${{ matrix.target }}
+
+      - name: Strip
+        run: strip target/${{ matrix.target }}/release/tilecap
+
+      - name: Archive
+        run: |
+          mkdir -p dist
+          cp target/${{ matrix.target }}/release/tilecap dist/
+          tar czf "dist/tilecap-${{ matrix.target }}.tar.gz" \
+            -C dist tilecap
+          rm dist/tilecap
+
+      - name: Build .deb
+        if: matrix.deb
+        run: cargo deb -p tilecap --target ${{ matrix.target }}
+        continue-on-error: true
+
+      - name: Collect packages
+        run: |
+          mkdir -p artifacts
+          cp dist/*.tar.gz artifacts/ 2>/dev/null || true
+          cp target/${{ matrix.target }}/debian/*.deb artifacts/ 2>/dev/null || true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tilecap-${{ matrix.target }}
+          path: artifacts/
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Organize
+        run: |
+          mkdir -p release-assets
+          find artifacts -type f -exec cp {} release-assets/ \;
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release-assets/*
+          generate_release_notes: true

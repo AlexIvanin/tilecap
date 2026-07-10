@@ -1,0 +1,39 @@
+[package]
+name = "tilecap"
+version = "0.1.0"
+edition = "2021"
+description = "Minimal screenshot tool for tiling window managers"
+authors = ["tilecap contributors"]
+license = "MIT"
+repository = "https://github.com/kira/tilecap"
+homepage = "https://github.com/kira/tilecap"
+
+[package.metadata.deb]
+depends = "libx11-6, libxcb1, xclip"
+section = "x11"
+priority = "optional"
+maintainer = "tilecap contributors"
+
+[package.metadata.rpm]
+package = "tilecap"
+depends = "libX11, libxcb, xclip"
+
+[features]
+default = ["x11", "wayland"]
+
+x11 = ["dep:x11rb"]
+wayland = [
+    "dep:wayland-client",
+    "dep:wayland-protocols-wlr",
+    "dep:libc",
+]
+
+[dependencies]
+x11rb = { version = "0.13", features = ["image", "cursor", "allow-unsafe-code"], optional = true }
+wayland-client = { version = "0.31", optional = true }
+wayland-protocols-wlr = { version = "0.3", features = ["client"], optional = true }
+libc = { version = "0.2", optional = true }
+clap = { version = "4", features = ["derive"] }
+png = "0.17"
+toml = "0.8"
+serde = { version = "1", features = ["derive"] }
