@@ -1,38 +1,38 @@
 # tilecap
 
-Скриншотер для тайловых WM. X11.
+Screenshot tool for tiling WMs. X11.
 
 ```
-tilecap -m full              # весь экран → файл
-tilecap -m window            # тык в окно → файл
-tilecap -m region            # выделить область → файл
+tilecap -m full              # full screen → file
+tilecap -m window            # click a window → file
+tilecap -m region            # drag to select → file
 tilecap -m region -o clipboard
 tilecap -r 800x600+100+50
 ```
 
-## Установка
+## Install
 
 ```
 cargo build --release
 install -m755 target/release/tilecap ~/.local/bin/
 ```
 
-Пакеты: `make deb`, `make rpm`, в `gentoo/` и `PKGBUILD` лежат заготовки.
+Packages: `make deb`, `make rpm`. PKGBUILD and Gentoo ebuild included.
 
-Зависимости: `xclip` для буфера обмена.
+Dep: `xclip` for clipboard support.
 
-## Использование
+## Usage
 
 ```
--m full|window|region    режим
--o file|clipboard        куда сохранять
--d <dir>                 директория
--n <name>                имя файла
--r <WxH+X+Y>             регион без интерактива
--c <path>                конфиг
+-m full|window|region    mode
+-o file|clipboard        output target
+-d <dir>                 output directory
+-n <name>                filename stem
+-r <WxH+X+Y>             non-interactive geometry
+-c <path>                config path
 ```
 
-Конфиг: `~/.config/tilecap/config.toml`
+Config: `~/.config/tilecap/config.toml`
 ```toml
 output_dir = "/home/user/Pictures/Screenshots"
 ```
