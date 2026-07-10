@@ -43,9 +43,9 @@ CRATES="
 inherit cargo
 
 DESCRIPTION="Minimal screenshot tool for tiling window managers"
-HOMEPAGE="https://github.com/kira/tilecap"
+HOMEPAGE="https://github.com/AlexIvanin/tilecap"
 SRC_URI="
-	https://github.com/kira/tilecap/archive/v${PV}.tar.gz -> ${P}.tar.gz
+	https://github.com/AlexIvanin/tilecap/archive/v${PV}.tar.gz -> ${P}.tar.gz
 	${CARGO_CRATE_URIS}
 "
 

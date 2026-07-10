@@ -5,8 +5,8 @@ edition = "2021"
 description = "Minimal screenshot tool for tiling window managers"
 authors = ["tilecap contributors"]
 license = "MIT"
-repository = "https://github.com/kira/tilecap"
-homepage = "https://github.com/kira/tilecap"
+repository = "https://github.com/AlexIvanin/tilecap"
+homepage = "https://github.com/AlexIvanin/tilecap"
 
 [package.metadata.deb]
 depends = "libx11-6, libxcb1, xclip"

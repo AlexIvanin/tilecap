@@ -5,11 +5,11 @@ pkgver=0.1.0
 pkgrel=1
 pkgdesc='Minimal screenshot tool for tiling window managers'
 arch=('x86_64')
-url='https://github.com/kira/tilecap'
+url='https://github.com/AlexIvanin/tilecap'
 license=('MIT')
 depends=('libx11' 'libxcb' 'xclip')
 makedepends=('cargo' 'rust')
-source=("$pkgname-$pkgver.tar.gz::https://github.com/kira/tilecap/archive/v$pkgver.tar.gz")
+source=("$pkgname-$pkgver.tar.gz::https://github.com/AlexIvanin/tilecap/archive/v$pkgver.tar.gz")
 sha256sums=('SKIP')
 
 build() {
