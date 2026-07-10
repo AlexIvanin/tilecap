@@ -47,7 +47,11 @@ dist-deb: deb
 dist-rpm: rpm
 dist-arch: arch
 
-install: build
+install:
+	@if [ ! -f target/release/$(NAME) ]; then \
+		echo "=== Run 'make build' first (as user), then 'doas make install' ==="; \
+		exit 1; \
+	fi
 	install -Dm755 target/release/$(NAME) $(DESTDIR)$(BINDIR)/$(NAME)
 
 uninstall:
